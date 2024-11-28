@@ -33,7 +33,7 @@ public class ArticuloDAO {
 
     // Insertar un nuevo artículo
     public void insertarArticulo(String nombre, double precio, String descripcion) {
-        String sql = "INSERT INTO articulos (nombre, precio, descripcion) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO articulos (id, nombre, precio, descripcion) VALUES (seq_articulos.NEXTVAL, ?, ?, ?)";
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
             pstmt.setString(1, nombre);
             pstmt.setDouble(2, precio);
@@ -44,5 +44,6 @@ public class ArticuloDAO {
             System.out.println("Error al insertar artículo: " + e.getMessage());
         }
     }
+
 
 }
