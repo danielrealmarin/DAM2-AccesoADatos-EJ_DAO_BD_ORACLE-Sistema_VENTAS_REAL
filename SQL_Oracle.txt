@@ -1,0 +1,44 @@
+CREATE TABLE ventas (
+    id NUMBER PRIMARY KEY,              -- ID de la venta
+    producto VARCHAR2(255) NOT NULL,     -- Nombre del producto
+    precio NUMBER(10, 2) NOT NULL,       -- Precio del producto
+    fecha DATE NOT NULL                  -- Fecha de la venta
+);
+
+CREATE TABLE articulos (
+    id NUMBER PRIMARY KEY,              -- ID del artículo
+    nombre VARCHAR2(255) NOT NULL,       -- Nombre del artículo
+    precio NUMBER(10, 2) NOT NULL,       -- Precio del artículo
+    descripcion VARCHAR2(500)            -- Descripción del artículo
+);
+
+ALTER TABLE ventas ADD (
+    articulo_id NUMBER,
+    CONSTRAINT fk_articulo FOREIGN KEY (articulo_id) REFERENCES articulos(id)
+);
+
+INSERT INTO articulos (id, nombre, precio, descripcion)
+VALUES (1, 'Camiseta Barcelona 2023', 49.99, 'Camiseta oficial del Barcelona temporada 2023.');
+INSERT INTO articulos (id, nombre, precio, descripcion)
+VALUES (2, 'Camiseta Real Madrid 2023', 59.99, 'Camiseta oficial del Real Madrid temporada 2023.');
+INSERT INTO articulos (id, nombre, precio, descripcion)
+VALUES (3, 'Camiseta Manchester United 2023', 45.99, 'Camiseta oficial del Manchester United temporada 2023.');
+INSERT INTO articulos (id, nombre, precio, descripcion)
+VALUES (4, 'Camiseta Juventus 2023', 55.99, 'Camiseta oficial de la Juventus temporada 2023.');
+
+
+INSERT INTO ventas (id, producto, precio, fecha, articulo_id)
+VALUES (1, 'Camiseta Barcelona 2023', 49.99, TO_DATE('2023-12-01', 'YYYY-MM-DD'), 1);
+INSERT INTO ventas (id, producto, precio, fecha, articulo_id)
+VALUES (2, 'Camiseta Real Madrid 2023', 59.99, TO_DATE('2023-12-02', 'YYYY-MM-DD'), 2);
+INSERT INTO ventas (id, producto, precio, fecha, articulo_id)
+VALUES (3, 'Camiseta Manchester United 2023', 45.99, TO_DATE('2023-12-03', 'YYYY-MM-DD'), 3);
+INSERT INTO ventas (id, producto, precio, fecha, articulo_id)
+VALUES (4, 'Camiseta Juventus 2023', 55.99, TO_DATE('2023-12-04', 'YYYY-MM-DD'), 4);
+
+
+CREATE SEQUENCE seq_articulos
+START WITH 5  -- Comienza desde el siguiente número disponible
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
