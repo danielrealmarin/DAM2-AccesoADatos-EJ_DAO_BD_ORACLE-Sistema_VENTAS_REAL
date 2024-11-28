@@ -14,33 +14,39 @@ public class VentaDAO {
         this.conexion = conexion;
     }
 
-    // Visualizar todas las ventas
-    public List<Venta> obtenerTodasLasVentas() throws SQLException {
-        List<Venta> ventas = new ArrayList<>();
+    // Obtener todas las ventas
+    public void obtenerTodasLasVentas() {
         String sql = "SELECT * FROM ventas";
         try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Venta venta = new Venta(rs.getInt("id"), rs.getString("producto"), rs.getDouble("precio"), rs.getString("fecha"));
-                ventas.add(venta);
+                int id = rs.getInt("id");
+                String producto = rs.getString("producto");
+                double precio = rs.getDouble("precio");
+                Date fecha = rs.getDate("fecha");
+                System.out.println("Venta ID: " + id + ", Producto: " + producto + ", Precio: " + precio + ", Fecha: " + fecha);
             }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener ventas: " + e.getMessage());
         }
-        return ventas;
     }
 
-    // Visualizar todas las ventas en un periodo específico
-    public List<Venta> obtenerVentasPorPeriodo(String fechaInicio, String fechaFin) throws SQLException {
-        List<Venta> ventas = new ArrayList<>();
+    public void obtenerVentasPorPeriodo(Date inicio, Date fin) {
         String sql = "SELECT * FROM ventas WHERE fecha BETWEEN ? AND ?";
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            pstmt.setString(1, fechaInicio);
-            pstmt.setString(2, fechaFin);
+            pstmt.setDate(1, inicio);
+            pstmt.setDate(2, fin);
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    Venta venta = new Venta(rs.getInt("id"), rs.getString("producto"), rs.getDouble("precio"), rs.getString("fecha"));
-                    ventas.add(venta);
+                    int id = rs.getInt("id");
+                    String producto = rs.getString("producto");
+                    double precio = rs.getDouble("precio");
+                    Date fecha = rs.getDate("fecha");
+                    System.out.println("Venta ID: " + id + ", Producto: " + producto + ", Precio: " + precio + ", Fecha: " + fecha);
                 }
             }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener ventas por periodo: " + e.getMessage());
         }
-        return ventas;
     }
 }

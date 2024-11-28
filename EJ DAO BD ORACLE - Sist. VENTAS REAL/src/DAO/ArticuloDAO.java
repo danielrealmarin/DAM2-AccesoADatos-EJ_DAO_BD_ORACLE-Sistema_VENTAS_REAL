@@ -15,27 +15,34 @@ public class ArticuloDAO {
     }
 
     // Visualizar todos los artículos
-    public List<Articulo> obtenerTodosLosArticulos() throws SQLException {
-        List<Articulo> articulos = new ArrayList<>();
+    public void obtenerTodosLosArticulos() {
         String sql = "SELECT * FROM articulos";
         try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Articulo articulo = new Articulo(rs.getInt("id"), rs.getString("nombre"), rs.getDouble("precio"), rs.getString("descripcion"));
-                articulos.add(articulo);
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                double precio = rs.getDouble("precio");
+                String descripcion = rs.getString("descripcion");
+                System.out.println("Artículo ID: " + id + ", Nombre: " + nombre + ", Precio: " + precio + ", Descripción: " + descripcion);
             }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener artículos: " + e.getMessage());
         }
-        return articulos;
     }
 
+
     // Insertar un nuevo artículo
-    public boolean insertarArticulo(Articulo articulo) throws SQLException {
+    public void insertarArticulo(String nombre, double precio, String descripcion) {
         String sql = "INSERT INTO articulos (nombre, precio, descripcion) VALUES (?, ?, ?)";
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            pstmt.setString(1, articulo.getNombre());
-            pstmt.setDouble(2, articulo.getPrecio());
-            pstmt.setString(3, articulo.getDescripcion());
-            int filasAfectadas = pstmt.executeUpdate();
-            return filasAfectadas > 0;
+            pstmt.setString(1, nombre);
+            pstmt.setDouble(2, precio);
+            pstmt.setString(3, descripcion);
+            pstmt.executeUpdate();
+            System.out.println("Artículo insertado correctamente.");
+        } catch (SQLException e) {
+            System.out.println("Error al insertar artículo: " + e.getMessage());
         }
     }
+
 }
